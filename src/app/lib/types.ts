@@ -1,14 +1,13 @@
-// Centralized types (DRY). Adjust later to match backend exactly.
-
+// src/app/lib/types.ts
 export type AuthUser = {
   email: string;
+  name?: string; // Make it optional
   role: "recruiter" | "admin";
 };
 
 export type AuthSession = {
   token: string;
   user: AuthUser;
-  // Epoch millis when session expires
   expiresAt: number;
 };
 
@@ -16,15 +15,17 @@ export type JobStatus = "open" | "screening" | "closed";
 
 export type Job = {
   id: string;
+  jobId?: string;
   title: string;
   location: string;
   employmentType: string;
   requiredSkills: string[];
   preferredSkills?: string[];
   minYearsExperience: number;
-  createdAt: string; // ISO string
+  description?: string;
+  createdAt: string;
   status: JobStatus;
-  applicantsCount: number;
+  applicantCount?: number;
 };
 
 export type CandidateShortlistEntry = {

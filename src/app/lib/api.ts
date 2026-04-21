@@ -1,131 +1,143 @@
-"use client";
+// src/app/lib/api.ts
 
 import axios from "axios";
-import { useSessionStore } from "./sessionStore";
-import { Job, ScreeningResult } from "./types";
-
-/**
- * API layer:
- * - Uses NEXT_PUBLIC_API_BASE_URL
- * - Adds Authorization header from session token
- * - Optional mock mode for local UI testing without backend
- */
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
-const USE_MOCK = (process.env.NEXT_PUBLIC_USE_MOCK_API || "false") === "true";
+import { API_BASE_URL } from "@/app/config/constants";
+import { useAuthStore } from "@/app/store/authStore";
 
 export const api = axios.create({
-  baseURL: BASE_URL,
-  timeout: 30_000,
+  baseURL: API_BASE_URL,
+  timeout: 30000,
 });
 
+// Request interceptor
 api.interceptors.request.use((config) => {
-  const { session, isValid, logout } = useSessionStore.getState();
-  if (session?.token) {
-    // If session expired, log out before sending request
-    if (!isValid()) {
-      logout();
-      throw new axios.Cancel("Session expired");
-    }
-    config.headers.Authorization = `Bearer ${session.token}`;
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-/* ---------------- MOCKS (for UI testing) ---------------- */
-
-const nowIso = () => new Date().toISOString();
-
-let mockJobs: Job[] = [
-  {
-    id: "JOB-001",
-    title: "Backend Engineer - AI Systems",
-    location: "Kigali, Rwanda",
-    employmentType: "Full-time",
-    requiredSkills: ["Node.js", "Python", "REST API", "Database Design"],
-    preferredSkills: ["Gemini API", "AWS", "Docker"],
-    minYearsExperience: 3,
-    createdAt: nowIso(),
-    status: "open",
-    applicantsCount: 50,
-  },
-];
-
-export async function loginApi(email: string, password: string): Promise<{ token: string }> {
-  if (USE_MOCK) {
-    // Demo credentials; adjust as you like
-    if (email === "recruiter@hirelens.ai" && password === "Password@123") {
-      return { token: "mock-token-123" };
+// Response interceptor
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      useAuthStore.getState().logout();
     }
-    throw new Error("Invalid email or password");
+    return Promise.reject(error);
   }
+);
 
-  // Example: backend route
-  const res = await api.post("/auth/login", { email, password });
+// ==================== AUTH ====================
+
+export async function signupApi(firstName: string, lastName: string, email: string, password: string) {
+  const res = await api.post("/api/auth/signup", { firstName, lastName, email, password });
   return res.data;
 }
 
-export async function listJobsApi(): Promise<Job[]> {
-  if (USE_MOCK) return mockJobs;
-  const res = await api.get("/jobs");
+export async function signinApi(email: string, password: string) {
+  const res = await api.post("/api/auth/signin", { email, password });
   return res.data;
 }
 
-export async function createJobApi(payload: Omit<Job, "id" | "createdAt" | "status" | "applicantsCount">): Promise<Job> {
-  if (USE_MOCK) {
-    const job: Job = {
-      ...payload,
-      id: `JOB-${String(mockJobs.length + 1).padStart(3, "0")}`,
-      createdAt: nowIso(),
-      status: "open",
-      applicantsCount: 0,
-    };
-    mockJobs = [job, ...mockJobs];
-    return job;
-  }
+// ==================== JOBS ====================
 
-  const res = await api.post("/jobs", payload);
+export async function listJobsApi(skip = 0, limit = 100) {
+  // ✅ axios -> uses API_BASE_URL (FastAPI), not Next.js
+  const res = await api.get("/api/jobs", { params: { skip, limit } });
   return res.data;
 }
 
-export async function updateJobApi(jobId: string, payload: Partial<Job>): Promise<Job> {
-  if (USE_MOCK) {
-    mockJobs = mockJobs.map((j) => (j.id === jobId ? { ...j, ...payload } : j));
-    const updated = mockJobs.find((j) => j.id === jobId)!;
-    return updated;
-  }
-
-  const res = await api.patch(`/jobs/${jobId}`, payload);
+export async function getJobApi(jobId: string) {
+  const res = await api.get(`/api/jobs/${jobId}`);
   return res.data;
 }
 
-export async function deleteJobApi(jobId: string): Promise<void> {
-  if (USE_MOCK) {
-    mockJobs = mockJobs.filter((j) => j.id !== jobId);
-    return;
-  }
-  await api.delete(`/jobs/${jobId}`);
+export async function createJobApi(payload: any) {
+  const res = await api.post("/api/jobs", payload);
+  return res.data;
 }
 
-export async function screenJobApi(jobId: string): Promise<ScreeningResult> {
-  if (USE_MOCK) {
-    // Fake shortlist
-    return {
-      jobId,
-      generatedAt: nowIso(),
-      top: [
-        {
-          candidateId: "Emmanuel_Gitonga",
-          matchScore: 92,
-          recommendation: "Strong Yes",
-          strengths: ["Strong backend skills", "AWS + Docker experience"],
-          gaps: ["Gemini API exposure not explicit"],
-          recruiterNote: "Strong fit overall; verify AI orchestration exposure.",
-        },
-      ],
-    };
-  }
+export async function updateJobApi(jobId: string, payload: any) {
+  const res = await api.put(`/api/jobs/${jobId}`, payload);
+  return res.data;
+}
 
-  const res = await api.post(`/jobs/${jobId}/screen`);
+export async function deleteJobApi(jobId: string) {
+  await api.delete(`/api/jobs/${jobId}`);
+}
+
+// Optional: endpoints used by your "Use all candidates" toggle (if you added it)
+export async function syncCandidatesApi(jobId: string) {
+  const res = await api.patch(`/api/jobs/${jobId}/sync-candidates`);
+  return res.data;
+}
+
+export async function unsyncCandidatesApi(jobId: string) {
+  const res = await api.patch(`/api/jobs/${jobId}/unsync-candidates`);
+  return res.data;
+}
+
+// ==================== CANDIDATES ====================
+
+export async function listCandidatesApi(skip = 0, limit = 10, search?: string) {
+  const params: any = { skip, limit };
+  if (search) params.search = search;
+  const res = await api.get("/api/candidates", { params });
+  return res.data;
+}
+
+export async function getCandidateApi(candidateId: string) {
+  const res = await api.get(`/api/candidates/${candidateId}`);
+  return res.data;
+}
+
+export async function uploadCandidatesApi(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await api.post("/api/candidates/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+}
+
+export async function deleteCandidateApi(candidateId: string) {
+  await api.delete(`/api/candidates/${candidateId}`);
+}
+
+// ==================== SCREENING ====================
+
+// Trigger a new screening run (calls Gemini on the backend)
+export async function triggerScreeningApi(payload: {
+  job_id: string;
+  candidate_ids?: string[];
+  use_all_candidates?: boolean;
+}) {
+  // Screening can take a long time (many Gemini calls)
+  const res = await api.post("/api/screening", payload, {
+    timeout: 15 * 60 * 1000, // 10 minutes
+  });
+  return res.data;
+}
+
+export async function listScreeningResultsApi(skip = 0, limit = 10, jobId?: string) {
+  const params: any = { skip, limit };
+  if (jobId) params.job_id = jobId;
+  const res = await api.get("/api/screening", { params });
+  return res.data;
+}
+
+export async function getScreeningResultApi(runId: string) {
+  const res = await api.get(`/api/screening/${runId}`);
+  return res.data;
+}
+
+// ==================== HEALTH ====================
+
+export async function healthCheckApi() {
+  const res = await api.get("/health");
   return res.data;
 }

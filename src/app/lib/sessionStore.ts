@@ -9,7 +9,7 @@ import { create } from "zustand";
 import { AuthSession } from "./types";
 
 const STORAGE_KEY = "hirelens_session_v1";
-const SESSION_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const SESSION_TTL_MS = 20 * 60 * 1000; // 5 minutes
 
 type SessionState = {
   session: AuthSession | null;
