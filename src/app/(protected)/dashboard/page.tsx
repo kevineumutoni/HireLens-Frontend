@@ -269,8 +269,8 @@ export default function DashboardPage() {
           </div>
 
           {[
-            { label: "Open — accepting applications", count: stats.open,     color: "#10B981", bg: "#ECFDF5",              href: "/jobs" },
-            { label: "Screened — AI ranking done",    count: stats.screened, color: "#8B5CF6", bg: "rgba(139,92,246,0.08)", href: "/jobs" },
+            { label: "Open accepting applications", count: stats.open,     color: "#10B981", bg: "#ECFDF5",              href: "/jobs" },
+            { label: "Screened AI ranking done",    count: stats.screened, color: "#8B5CF6", bg: "rgba(139,92,246,0.08)", href: "/jobs" },
             { label: "Total candidates in system",    count: loading ? "—" : candidatesTotal, color: BRAND, bg: "rgba(44,124,242,0.08)", href: "/candidates" },
             { label: "AI screening runs",             count: loading ? "—" : screeningRunsTotal, color: "#F59E0B", bg: "#FFFBEB", href: "/screening" },
           ].map(item => (

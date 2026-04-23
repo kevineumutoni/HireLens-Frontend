@@ -1,9 +1,5 @@
 "use client";
 
-// src/app/signup/page.tsx
-// UI: Split layout — left blue brand panel, right white form.
-// Adds: debug logging + visible inline error banner (no UI redesign).
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -21,7 +17,6 @@ import { TermsModal } from "./components/TermsModal";
 import { PasswordStrength } from "./components/PasswordStrength";
 import { FieldInput, FieldError } from "./components/FieldInput";
 
-// ── Validation (unchanged) ─────────────────────────────────────
 const passwordSchema = z
   .string()
   .min(8, "Min 8 characters")
@@ -46,7 +41,6 @@ const schema = z
 
 type FormValues = z.infer<typeof schema>;
 
-// ── Left-panel feature row ─────────────────────────────────────
 function FeatureRow({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -83,7 +77,6 @@ function formatAxiosError(e: unknown): string {
   return status ? `(${status}) ${detail}` : String(detail);
 }
 
-// ── Page ───────────────────────────────────────────────────────
 export default function SignupPage() {
   const router = useRouter();
   const [googleBusy, setGoogleBusy] = useState(false);
@@ -92,7 +85,6 @@ export default function SignupPage() {
   const [showTerms, setShowTerms] = useState(false);
   const [passwordValue, setPasswordValue] = useState("");
 
-  // NEW: visible inline error (in case toast is not mounted)
   const [submitError, setSubmitError] = useState<string>("");
 
   const {
@@ -104,7 +96,6 @@ export default function SignupPage() {
 
   const hasAnyError = useMemo(() => Object.keys(errors).length > 0, [errors]);
 
-  // NEW: live "passwords do not match" while typing confirm password
   const confirmValue = watch("confirmPassword") ?? "";
   const confirmTouched = !!touchedFields.confirmPassword;
 
@@ -120,11 +111,9 @@ export default function SignupPage() {
     toast.error("Please fix the form errors.");
   };
 
-  // ── Signup handler with logs ────────────────────────────────
   const onSubmit = async (v: FormValues) => {
     setSubmitError("");
 
-    // Log safe info only (never log passwords)
     console.log("[signup] submit clicked", {
       firstName: v.firstName,
       lastName: v.lastName,
@@ -139,7 +128,6 @@ export default function SignupPage() {
       toast.success("Account created! Please sign in.");
       router.push("/login");
     } catch (e: unknown) {
-      // Detailed axios logging
       if (axios.isAxiosError(e)) {
         console.error("[signup] axios error", {
           message: e.message,
