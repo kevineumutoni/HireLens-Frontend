@@ -109,6 +109,13 @@ What the demo covers:
 │  · users         │         │                      │
 └──────────────────┘         └──────────────────────┘
 ```
+<img width="680" height="780" alt="hirelens_architecture 1" src="https://github.com/user-attachments/assets/1f5bb6c0-8089-4e7d-b17b-33a97fa73d75" />
+
+## HireLens Product Requirements Document
+<img width="680" height="900" alt="hirelens_prd 1 (1)" src="https://github.com/user-attachments/assets/4b4588ef-0f2a-46da-9571-0644ccc4e55f" />
+
+## Hirelens System Requirements Document
+<img width="680" height="820" alt="hirelens_srd 1 (1)" src="https://github.com/user-attachments/assets/97d13af3-d75c-47c6-a42b-0389ff236d3c" />
 
 ---
 
@@ -575,6 +582,10 @@ Skills format: `SkillName:Level:YearsExp` separated by semicolons. Level must be
 - **No real-time streaming** — Progress modal simulates progress with fake increments. Actual screening runs server-side as a single HTTP request.
 
 ---
+
+## Why should you trust HireLens amongst other recruiting systems
+<img width="2181" height="1869" alt="image 1" src="https://github.com/user-attachments/assets/112e50a2-d26f-4c96-960b-34fc3cdffdda" />
+
 
 <div align="center">
 
