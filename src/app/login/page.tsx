@@ -1,12 +1,5 @@
 "use client";
 
-// ============================================================
-// src/app/login/page.tsx  — UI overhaul
-// Split layout: left = brand panel (blue), right = form (white)
-// Colors: #2C7CF2 blue + white only.
-// All functional code (hooks, API calls, validation) untouched.
-// ============================================================
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -28,7 +21,6 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-// ── Small stat card used in the left panel ────────────────────
 function StatCard({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
     <div
@@ -78,7 +70,6 @@ export default function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
-  // ── unchanged functional code ──────────────────────────────
   const onSubmit = async (v: FormValues) => {
     try {
       const res = await signinApi(v.email, v.password);
@@ -103,14 +94,11 @@ export default function LoginPage() {
       setGoogleBusy(false);
     }
   };
-  // ──────────────────────────────────────────────────────────
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter', system-ui, sans-serif" }}>
 
-      {/* ════════════════════════════════════════════════════
-          LEFT PANEL — brand / illustration
-      ════════════════════════════════════════════════════ */}
+
       <div
         style={{
           flex: "0 0 46%",
@@ -124,7 +112,6 @@ export default function LoginPage() {
         }}
         className="hidden lg:flex"
       >
-        {/* Decorative circles */}
         <div
           style={{
             position: "absolute",
@@ -162,12 +149,10 @@ export default function LoginPage() {
           }}
         />
 
-        {/* Logo */}
         <div style={{ position: "relative" }}>
           <LensLogo size={44} variant="full" theme="white" />
         </div>
 
-        {/* Hero copy */}
         <div style={{ position: "relative" }}>
           <div
             style={{
@@ -183,7 +168,7 @@ export default function LoginPage() {
           >
             <Sparkles size={13} color="#fff" />
             <span style={{ fontSize: 12, fontWeight: 600, color: "#fff", letterSpacing: "0.03em" }}>
-              Powered by Gemini AI
+              Powered by Gemini AI for screening process
             </span>
           </div>
 
@@ -209,7 +194,7 @@ export default function LoginPage() {
               maxWidth: 340,
             }}
           >
-            AI-powered talent screening that ranks candidates in seconds — with full explainability and zero bias.
+            AI-powered talent screening that ranks candidates in seconds, with full explainability and zero bias.
           </p>
 
           {/* Stats grid */}
@@ -223,13 +208,11 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", position: "relative" }}>
-          © 2026 HireLens · Umurava AI Hackathon
+          © 2026 HireLens · Umurava AI Hackathon 
         </p>
       </div>
 
-      {/* ════════════════════════════════════════════════════
-          RIGHT PANEL — login form
-      ════════════════════════════════════════════════════ */}
+
       <div
         style={{
           flex: 1,
@@ -265,7 +248,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Google button */}
           <button
             type="button"
             onClick={onGoogle}
@@ -290,7 +272,6 @@ export default function LoginPage() {
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#2C7CF2")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E2E8F0")}
           >
-            {/* Google G icon */}
             <svg width="18" height="18" viewBox="0 0 18 18">
               <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
               <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
@@ -300,17 +281,14 @@ export default function LoginPage() {
             {googleBusy ? "Opening Google…" : "Continue with Google"}
           </button>
 
-          {/* Divider */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
             <div style={{ flex: 1, height: 1, background: "#E2E8F0" }} />
             <span style={{ fontSize: 12, color: "#94A3B8", fontWeight: 500 }}>or continue with email</span>
             <div style={{ flex: 1, height: 1, background: "#E2E8F0" }} />
           </div>
 
-          {/* Email / Password form */}
           <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
 
-            {/* Email field */}
             <div>
               <label
                 style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 7 }}
@@ -350,7 +328,6 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Password field */}
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 7 }}>
                 <label style={{ fontSize: 13, fontWeight: 600, color: "#374151" }}>Password</label>
@@ -406,7 +383,6 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Submit button */}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -446,7 +422,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Sign up link */}
           <p style={{ marginTop: 24, textAlign: "center", fontSize: 14, color: "#64748B" }}>
             Don&apos;t have an account?{" "}
             <Link
@@ -461,7 +436,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Spinner keyframe — injected once */}
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         * { box-sizing: border-box; }

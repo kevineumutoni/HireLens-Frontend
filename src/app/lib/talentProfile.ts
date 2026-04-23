@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-/**
- * Frontend validation mirroring Umurava Talent Profile Schema.
- * This prevents malformed dummy data / CSV imports from entering the system.
- */
 
 export const SkillSchema = z.object({
   name: z.string().min(1),

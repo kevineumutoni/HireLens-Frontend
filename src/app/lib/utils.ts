@@ -1,15 +1,12 @@
-// src/lib/utils.ts
-// Shared utility functions
+
 
 import { clsx, type ClassValue } from 'clsx';
 import { JobStatus } from '@/app/types';
 
-/** Merge Tailwind classes safely */
 export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);
 }
 
-/** Format a date string to a readable format */
 export function formatDate(dateStr: string): string {
   if (!dateStr) return '—';
   const d = new Date(dateStr);
@@ -21,7 +18,6 @@ export function formatDate(dateStr: string): string {
   });
 }
 
-/** Format relative time (e.g., "2 hours ago") */
 export function timeAgo(dateStr: string): string {
   if (!dateStr) return '—';
   const d = new Date(dateStr);
@@ -38,7 +34,6 @@ export function timeAgo(dateStr: string): string {
   return formatDate(dateStr);
 }
 
-/** Get badge class for job status */
 export function statusBadgeClass(status: JobStatus): string {
   const map: Record<JobStatus, string> = {
     open: 'badge-open',
@@ -48,7 +43,6 @@ export function statusBadgeClass(status: JobStatus): string {
   return `badge ${map[status] || 'badge-closed'}`;
 }
 
-/** Get status label */
 export function statusLabel(status: JobStatus): string {
   const map: Record<JobStatus, string> = {
     open: 'Open',
@@ -58,7 +52,6 @@ export function statusLabel(status: JobStatus): string {
   return map[status] || status;
 }
 
-/** Get score color class */
 export function scoreColor(score: number): string {
   if (score >= 80) return '#10B981'; // green
   if (score >= 65) return '#2C7CF2'; // blue
@@ -66,7 +59,6 @@ export function scoreColor(score: number): string {
   return '#EF4444'; // red
 }
 
-/** Get recommendation badge style */
 export function recommendationStyle(rec: string): { bg: string; color: string } {
   const map: Record<string, { bg: string; color: string }> = {
     'Strong Yes': { bg: '#ECFDF5', color: '#059669' },
@@ -78,7 +70,6 @@ export function recommendationStyle(rec: string): { bg: string; color: string } 
   return map[rec] || { bg: '#F3F4F6', color: '#6B7280' };
 }
 
-/** Parse comma/newline separated skills string into array */
 export function parseSkillsInput(input: string): string[] {
   return input
     .split(/[,\n]/)
@@ -86,11 +77,10 @@ export function parseSkillsInput(input: string): string[] {
     .filter(Boolean);
 }
 
-/** Check if backend is reachable */
 export async function checkBackendHealth(): Promise<boolean> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/health`,
+      `${process.env.NEXT_PUBLIC_API_URL}/health`,
       { signal: AbortSignal.timeout(3000) }
     );
     return res.ok;

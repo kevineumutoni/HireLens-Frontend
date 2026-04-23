@@ -1,6 +1,3 @@
-// src/lib/mockData.ts
-// Realistic mock data for frontend dev/testing
-// Used when backend is offline — switch via NEXT_PUBLIC_USE_MOCK=true
 
 import { Job, TalentProfile, DashboardStats, ScreeningRun } from '@/app/types';
 

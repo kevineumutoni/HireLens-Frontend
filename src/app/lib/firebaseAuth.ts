@@ -1,4 +1,3 @@
-// src/app/lib/firebaseAuth.ts
 "use client";
 
 import { signInWithPopup } from "firebase/auth";

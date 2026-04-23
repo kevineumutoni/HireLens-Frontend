@@ -9,7 +9,6 @@ export const api = axios.create({
   timeout: 30000,
 });
 
-// Request interceptor
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
   if (token) {
@@ -19,7 +18,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -30,7 +28,6 @@ api.interceptors.response.use(
   }
 );
 
-// ==================== AUTH ====================
 
 export async function signupApi(firstName: string, lastName: string, email: string, password: string) {
   const res = await api.post("/api/auth/signup", { firstName, lastName, email, password });
@@ -45,7 +42,6 @@ export async function signinApi(email: string, password: string) {
 // ==================== JOBS ====================
 
 export async function listJobsApi(skip = 0, limit = 100) {
-  // ✅ axios -> uses API_BASE_URL (FastAPI), not Next.js
   const res = await api.get("/api/jobs", { params: { skip, limit } });
   return res.data;
 }
@@ -61,7 +57,7 @@ export async function createJobApi(payload: any) {
 }
 
 export async function updateJobApi(jobId: string, payload: any) {
-  const res = await api.put(`/api/jobs/${jobId}`, payload);
+  const res = await api.patch(`/api/jobs/${jobId}`, payload);
   return res.data;
 }
 
@@ -69,7 +65,6 @@ export async function deleteJobApi(jobId: string) {
   await api.delete(`/api/jobs/${jobId}`);
 }
 
-// Optional: endpoints used by your "Use all candidates" toggle (if you added it)
 export async function syncCandidatesApi(jobId: string) {
   const res = await api.patch(`/api/jobs/${jobId}/sync-candidates`);
   return res.data;
@@ -80,7 +75,6 @@ export async function unsyncCandidatesApi(jobId: string) {
   return res.data;
 }
 
-// ==================== CANDIDATES ====================
 
 export async function listCandidatesApi(skip = 0, limit = 10, search?: string) {
   const params: any = { skip, limit };
@@ -108,17 +102,14 @@ export async function deleteCandidateApi(candidateId: string) {
   await api.delete(`/api/candidates/${candidateId}`);
 }
 
-// ==================== SCREENING ====================
 
-// Trigger a new screening run (calls Gemini on the backend)
 export async function triggerScreeningApi(payload: {
   job_id: string;
   candidate_ids?: string[];
   use_all_candidates?: boolean;
 }) {
-  // Screening can take a long time (many Gemini calls)
   const res = await api.post("/api/screening", payload, {
-    timeout: 15 * 60 * 1000, // 10 minutes
+    timeout: 15 * 60 * 1000, 
   });
   return res.data;
 }
@@ -135,7 +126,16 @@ export async function getScreeningResultApi(runId: string) {
   return res.data;
 }
 
-// ==================== HEALTH ====================
+export async function deleteScreeningRunApi(runId: string) {
+  const res = await api.delete(`/api/screening/${runId}`);
+  return res.data;
+}
+
+export async function deleteAllScreeningRunsApi() {
+  const res = await api.delete("/api/screening");
+  return res.data;
+}
+
 
 export async function healthCheckApi() {
   const res = await api.get("/health");

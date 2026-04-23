@@ -1,6 +1,4 @@
 "use client";
-// src/app/(protected)/screening/CandidateResultCard.tsx
-// Expandable candidate result card with strengths, gaps, score, recommendation
 
 import { useState } from "react";
 import { CheckCircle, XCircle, ChevronDown, ChevronUp, Star } from "lucide-react";
@@ -21,7 +19,6 @@ export interface CandidateResult {
   evaluationStatus?: string;
 }
 
-// ── Score ring SVG ────────────────────────────────────────────
 function ScoreRing({ score }: { score: number }) {
   const r = 22;
   const circ = 2 * Math.PI * r;
@@ -52,7 +49,6 @@ function ScoreRing({ score }: { score: number }) {
   );
 }
 
-// ── Recommendation badge ──────────────────────────────────────
 function RecBadge({ rec }: { rec?: string }) {
   const map: Record<string, { bg: string; color: string }> = {
     "Strong Yes": { bg: "#ECFDF5", color: "#059669" },
@@ -71,7 +67,6 @@ function RecBadge({ rec }: { rec?: string }) {
   );
 }
 
-// ── Main card ─────────────────────────────────────────────────
 export function CandidateResultCard({
   candidate,
   defaultOpen = false,
@@ -99,7 +94,6 @@ export function CandidateResultCard({
       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(44,124,242,0.08)")}
       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "none")}
     >
-      {/* ── Header row (always visible) ───────────────────── */}
       <div
         style={{
           display: "flex", alignItems: "center", gap: 12,
@@ -109,7 +103,6 @@ export function CandidateResultCard({
         }}
         onClick={() => setOpen(!open)}
       >
-        {/* Rank */}
         <div style={{
           width: 30, height: 30, borderRadius: "50%", flexShrink: 0,
           background: isTop3 ? BRAND : "#F1F5F9",
@@ -121,7 +114,6 @@ export function CandidateResultCard({
           }
         </div>
 
-        {/* Name + badge */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{
             fontSize: 13, fontWeight: 700, color: "#0F172A",
@@ -133,16 +125,13 @@ export function CandidateResultCard({
           <RecBadge rec={candidate.recommendation} />
         </div>
 
-        {/* Score ring */}
         <ScoreRing score={candidate.matchScore ?? 0} />
 
-        {/* Chevron */}
         <div style={{ color: "#94A3B8", flexShrink: 0 }}>
           {open ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
         </div>
       </div>
 
-      {/* ── Expanded body ─────────────────────────────────── */}
       {open && (
         <div style={{
           borderTop: "1px solid #F0F4FF",
@@ -205,7 +194,6 @@ export function CandidateResultCard({
             </div>
           )}
 
-          {/* AI explanation */}
           {candidate.explanation && (
             <div style={{
               padding: "8px 12px",

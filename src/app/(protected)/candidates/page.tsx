@@ -1,11 +1,5 @@
 "use client";
 
-// ============================================================
-// src/app/(protected)/candidates/page.tsx
-// ADDED: click a row → CandidateModal opens with full details.
-// Everything else is identical to the original.
-// ============================================================
-
 import { useEffect, useState } from "react";
 import { listCandidatesApi } from "@/app/lib/api";
 import { FileUploadModal } from "@/app/components/FileUploadModal";
@@ -18,7 +12,6 @@ import type { Candidate, Skill } from "./types";
 
 const BRAND = "#2C7CF2";
 
-// ── Avatar initials ────────────────────────────────────────────
 function Avatar({ first, last }: { first?: string; last?: string }) {
   const initials = `${first?.[0] ?? ""}${last?.[0] ?? ""}`.toUpperCase() || "?";
   const hue = ((first?.charCodeAt(0) ?? 0) * 37 + (last?.charCodeAt(0) ?? 0) * 13) % 360;
@@ -44,7 +37,6 @@ function Avatar({ first, last }: { first?: string; last?: string }) {
   );
 }
 
-// ── Skill tag ──────────────────────────────────────────────────
 function SkillTag({ name }: { name: string }) {
   return (
     <span
@@ -63,7 +55,6 @@ function SkillTag({ name }: { name: string }) {
   );
 }
 
-// ── Skeleton row ───────────────────────────────────────────────
 function SkeletonRow() {
   return (
     <tr>
@@ -85,9 +76,7 @@ function SkeletonRow() {
   );
 }
 
-// ── Main page ──────────────────────────────────────────────────
 export default function CandidatesPage() {
-  // ── unchanged state & handlers ────────────────────────────
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -97,7 +86,6 @@ export default function CandidatesPage() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
-  // ── NEW: selected candidate for detail modal ───────────────
   const [selected, setSelected] = useState<Candidate | null>(null);
 
   const loadCandidates = async () => {
@@ -125,12 +113,10 @@ export default function CandidatesPage() {
       loadCandidates();
     }, 300);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   useEffect(() => {
     loadCandidates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   // ──────────────────────────────────────────────────────────
 
@@ -279,7 +265,6 @@ export default function CandidatesPage() {
         </div>
       </div>
 
-      {/* ── Table card ──────────────────────────────────────── */}
       <div
         style={{
           background: "#fff",
@@ -352,7 +337,6 @@ export default function CandidatesPage() {
                   return (
                     <tr
                       key={String(key)}
-                      // ── NEW: open modal on row click ─────
                       onClick={() => setSelected(candidate)}
                       style={{
                         borderTop: "1px solid #F8FAFC",
@@ -457,11 +441,9 @@ export default function CandidatesPage() {
         )}
       </div>
 
-      {/* ── Modals ──────────────────────────────────────────── */}
       <FileUploadModal isOpen={uploadOpen} onClose={() => setUploadOpen(false)} onSuccess={loadCandidates} />
       <AddCandidateModal open={addOpen} onClose={() => setAddOpen(false)} onSuccess={loadCandidates} />
 
-      {/* ── NEW: Candidate detail modal ─────────────────────── */}
       <CandidateModal candidate={selected} onClose={() => setSelected(null)} />
 
       <style>{`

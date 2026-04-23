@@ -1,17 +1,11 @@
 "use client";
 
-// ============================================================
-// AddCandidateModal — UI overhaul
-// Colors: #2C7CF2 + white. Functional code untouched.
-// ============================================================
-
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { X, User, Mail, Briefcase, MapPin, UserPlus, AlertCircle } from "lucide-react";
 
 const BRAND = "#2C7CF2";
 
-// ── Styled input with icon ─────────────────────────────────────
 function ModalInput({
   icon, placeholder, value, onChange, type = "text", span2 = false,
 }: {
@@ -59,7 +53,6 @@ function ModalInput({
   );
 }
 
-// ── Main modal ─────────────────────────────────────────────────
 export function AddCandidateModal({
   open, onClose, onSuccess,
 }: {
@@ -68,7 +61,6 @@ export function AddCandidateModal({
   onSuccess: () => void;
 }) {
 
-  // ── unchanged functional code ──────────────────────────────
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "",
@@ -86,7 +78,7 @@ export function AddCandidateModal({
     setBusy(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/candidates`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/candidates`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -114,7 +106,6 @@ export function AddCandidateModal({
       setBusy(false);
     }
   };
-  // ──────────────────────────────────────────────────────────
 
   const set = (key: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [key]: v }));
 
@@ -125,7 +116,6 @@ export function AddCandidateModal({
 
   return (
     <>
-      {/* Backdrop */}
       <div
         style={{
           position: "fixed", inset: 0, zIndex: 9998,
@@ -135,7 +125,6 @@ export function AddCandidateModal({
         onClick={onClose}
       />
 
-      {/* Modal */}
       <div style={{
         position: "fixed", inset: 0, zIndex: 9999,
         display: "flex", alignItems: "center", justifyContent: "center",
@@ -151,14 +140,12 @@ export function AddCandidateModal({
           animation: "modalIn 0.2s ease both",
         }}>
 
-          {/* ── Header ──────────────────────────────────────── */}
           <div style={{
             background: "linear-gradient(135deg, #1a65d6 0%, #2C7CF2 55%, #3d8ff5 100%)",
             padding: "20px 24px",
             display: "flex", justifyContent: "space-between", alignItems: "center",
             position: "relative", overflow: "hidden",
           }}>
-            {/* Decorative ring */}
             <div style={{
               position: "absolute", width: 160, height: 160, borderRadius: "50%",
               border: "1px solid rgba(255,255,255,0.10)",
@@ -202,10 +189,8 @@ export function AddCandidateModal({
             </button>
           </div>
 
-          {/* ── Body ────────────────────────────────────────── */}
           <div style={{ padding: "22px 24px 0" }}>
 
-            {/* Required note */}
             <div style={{
               display: "flex", alignItems: "center", gap: 6,
               padding: "8px 12px", borderRadius: 9,
@@ -228,7 +213,6 @@ export function AddCandidateModal({
             </div>
           </div>
 
-          {/* ── Footer ──────────────────────────────────────── */}
           <div style={{
             padding: "18px 24px 22px",
             display: "flex", justifyContent: "flex-end", gap: 10,

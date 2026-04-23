@@ -12,7 +12,6 @@ import Link from "next/link";
 
 const BRAND = "#2C7CF2";
 
-// ── Status pill ────────────────────────────────────────────────
 function StatusPill({ status }: { status?: string }) {
   const s = (status ?? "open").toLowerCase();
   const map: Record<string, { bg: string; color: string; dot: string; label: string }> = {
@@ -33,7 +32,6 @@ function StatusPill({ status }: { status?: string }) {
   );
 }
 
-// ── Score ring ────────────────────────────────────────────────
 function ScoreRing({ score }: { score: number }) {
   const r = 22;
   const circ = 2 * Math.PI * r;
@@ -61,7 +59,6 @@ function ScoreRing({ score }: { score: number }) {
   );
 }
 
-// ── Recommendation badge ──────────────────────────────────────
 function RecBadge({ rec }: { rec?: string }) {
   const map: Record<string, { bg: string; color: string }> = {
     "Strong Yes": { bg: "#ECFDF5", color: "#059669" },
@@ -77,7 +74,6 @@ function RecBadge({ rec }: { rec?: string }) {
   );
 }
 
-// ── Candidate row (expandable) ────────────────────────────────
 function CandidateRow({ candidate, rank }: { candidate: any; rank: number }) {
   const [open, setOpen] = useState(false);
   const isTop3 = rank <= 3;
@@ -91,7 +87,6 @@ function CandidateRow({ candidate, rank }: { candidate: any; rank: number }) {
       background: "#fff",
       transition: "border-color 0.15s",
     }}>
-      {/* Summary row */}
       <div
         style={{
           display: "flex", alignItems: "center", gap: 12,
@@ -99,7 +94,6 @@ function CandidateRow({ candidate, rank }: { candidate: any; rank: number }) {
         }}
         onClick={() => setOpen(!open)}
       >
-        {/* Rank */}
         <div style={{
           width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
           background: isTop3 ? BRAND : "#F1F5F9",
@@ -181,7 +175,6 @@ function CandidateRow({ candidate, rank }: { candidate: any; rank: number }) {
   );
 }
 
-// ── Skeleton ───────────────────────────────────────────────────
 function Skeleton({ w, h, r = 6 }: { w: string | number; h: number; r?: number }) {
   return (
     <div style={{
@@ -192,10 +185,8 @@ function Skeleton({ w, h, r = 6 }: { w: string | number; h: number; r?: number }
   );
 }
 
-// ── Main page ──────────────────────────────────────────────────
 export default function JobDetailPage() {
 
-  // ── state (unchanged) ──────────────────────────────────────
   const params = useParams<{ jobId: string }>();
   const [job, setJob]           = useState<any>(null);
   const [screening, setScreening] = useState<any>(null);
@@ -218,7 +209,6 @@ export default function JobDetailPage() {
       }
     })();
   }, [params.jobId]);
-  // ──────────────────────────────────────────────────────────
 
   if (loading) return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20, fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -249,7 +239,6 @@ export default function JobDetailPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20, fontFamily: "'Inter', system-ui, sans-serif" }}>
 
-      {/* ── Back link ───────────────────────────────────────── */}
       <Link href="/jobs" style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         fontSize: 13, fontWeight: 600, color: BRAND,
@@ -265,14 +254,12 @@ export default function JobDetailPage() {
         <ArrowLeft size={14} /> Back to Jobs
       </Link>
 
-      {/* ── Job info card ───────────────────────────────────── */}
       <div style={{
         background: "#fff", border: "1px solid #E2E8F0",
         borderRadius: 20, overflow: "hidden",
         boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
         animation: "fadeUp 0.35s ease both",
       }}>
-        {/* Blue header strip */}
         <div style={{
           background: "linear-gradient(135deg, #1a65d6 0%, #2C7CF2 55%, #3d8ff5 100%)",
           padding: "24px 28px 20px",
@@ -297,7 +284,6 @@ export default function JobDetailPage() {
           </div>
         </div>
 
-        {/* Meta row */}
         <div style={{ padding: "18px 28px", borderBottom: "1px solid #F1F5F9" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
             {[

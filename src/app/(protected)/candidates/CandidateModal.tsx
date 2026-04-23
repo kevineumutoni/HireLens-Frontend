@@ -11,7 +11,6 @@ import { FaGithub as Github, FaLinkedin as Linkedin } from "react-icons/fa";
 
 const BRAND = "#2C7CF2";
 
-// ── helpers ────────────────────────────────────────────────────
 
 function Avatar({ first, last, size = 52 }: { first?: string; last?: string; size?: number }) {
   const initials = `${first?.[0] ?? ""}${last?.[0] ?? ""}`.toUpperCase() || "?";
@@ -95,7 +94,6 @@ function InfoRow({ icon, text }: { icon: React.ReactNode; text: string }) {
   );
 }
 
-// ── Main modal ─────────────────────────────────────────────────
 
 interface CandidateModalProps {
   candidate: any | null;
@@ -103,7 +101,6 @@ interface CandidateModalProps {
 }
 
 export function CandidateModal({ candidate, onClose }: CandidateModalProps) {
-  // Close on Escape key
   useEffect(() => {
     if (!candidate) return;
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -111,7 +108,6 @@ export function CandidateModal({ candidate, onClose }: CandidateModalProps) {
     return () => window.removeEventListener("keydown", handler);
   }, [candidate, onClose]);
 
-  // Prevent body scroll while open
   useEffect(() => {
     if (candidate) {
       document.body.style.overflow = "hidden";

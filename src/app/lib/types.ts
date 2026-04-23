@@ -1,7 +1,7 @@
 // src/app/lib/types.ts
 export type AuthUser = {
   email: string;
-  name?: string; // Make it optional
+  name?: string; 
   role: "recruiter" | "admin";
 };
 

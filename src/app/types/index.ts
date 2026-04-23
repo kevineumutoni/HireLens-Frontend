@@ -1,6 +1,3 @@
-// src/types/index.ts
-// Central type definitions for HireLens Frontend
-// These mirror the Python backend schemas exactly
 
 export interface User {
   email: string;
@@ -14,7 +11,6 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-// ─── Job Types ──────────────────────────────────────────────────────────────
 
 export type JobStatus = 'open' | 'screening' | 'closed';
 
@@ -49,7 +45,6 @@ export interface CreateJobPayload {
   softSkills: string[];
 }
 
-// ─── Candidate / Talent Profile Types ───────────────────────────────────────
 
 export interface Skill {
   name: string;
@@ -109,7 +104,6 @@ export interface TalentProfile {
   createdAt?: string;
 }
 
-// ─── Screening Types ─────────────────────────────────────────────────────────
 
 export interface ScreeningResult {
   candidateId: string;
@@ -138,7 +132,6 @@ export interface ScreeningRun {
   status: 'running' | 'completed' | 'failed';
 }
 
-// ─── API Response Types ───────────────────────────────────────────────────────
 
 export interface ApiResponse<T> {
   data?: T;
@@ -153,7 +146,6 @@ export interface PaginatedResponse<T> {
   limit: number;
 }
 
-// ─── Dashboard Stats ──────────────────────────────────────────────────────────
 
 export interface DashboardStats {
   totalJobs: number;

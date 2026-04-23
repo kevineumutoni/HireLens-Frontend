@@ -1,10 +1,5 @@
 "use client";
 
-// ============================================================
-// src/app/app/jobs/new/page.tsx
-// Fix: includeMockCandidates properly sent as boolean.
-// Added: live candidate count preview fetched on mount.
-// ============================================================
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -20,7 +15,6 @@ import toast from "react-hot-toast";
 
 const BRAND = "#2C7CF2";
 
-// ── Validation (unchanged) ─────────────────────────────────────
 const schema = z.object({
   title: z.string().min(3, "Title required"),
   description: z.string().min(10, "Description required"),
@@ -38,7 +32,6 @@ const schema = z.object({
   requiredEducation: z.string().optional().default(""),
 });
 
-// ── Field wrapper (unchanged) ──────────────────────────────────
 function Field({
   label, required, hint, error, icon, children,
 }: {
@@ -72,7 +65,6 @@ function Field({
   );
 }
 
-// ── Input style (unchanged) ────────────────────────────────────
 const inputStyle = (hasIcon: boolean, error: boolean): React.CSSProperties => ({
   width: "100%",
   paddingTop: 10, paddingBottom: 10,
@@ -87,7 +79,6 @@ const inputStyle = (hasIcon: boolean, error: boolean): React.CSSProperties => ({
   transition: "border-color 0.15s, box-shadow 0.15s",
 });
 
-// ── Section card (unchanged) ───────────────────────────────────
 function SectionCard({
   icon, title, children, delay,
 }: {
@@ -121,7 +112,6 @@ function SectionCard({
   );
 }
 
-// ── Toggle switch ──────────────────────────────────────────────
 function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button
@@ -151,21 +141,17 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   );
 }
 
-// ── Main page ──────────────────────────────────────────────────
 export default function NewJobPage() {
   const router = useRouter();
 
-  // Toggle state — kept outside RHF intentionally (boolean, not form field)
   const [includeMock, setIncludeMock] = useState(false);
 
-  // ── Fetch total candidate count on mount so we can show it in the toggle ──
   const [candidateCount, setCandidateCount] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
         const res = await listCandidatesApi(0, 1);
-        // listCandidatesApi returns { total, data, ... }
         setCandidateCount(Number(res?.total ?? res?.data?.total ?? 0));
       } catch {
         setCandidateCount(null);
@@ -173,7 +159,6 @@ export default function NewJobPage() {
     })();
   }, []);
 
-  // ── Form (unchanged) ──────────────────────────────────────
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(schema),
     mode: "onBlur",
@@ -195,7 +180,6 @@ export default function NewJobPage() {
         minYearsExperience: parseInt(data.minYearsExperience, 10) || 0,
         requiredEducation: data.requiredEducation || "Any",
         softSkills: [],
-        // ── FIX: send as explicit boolean, never undefined ──
         includeMockCandidates: includeMock === true,
       };
       const job = await createJobApi(payload);
@@ -211,7 +195,6 @@ export default function NewJobPage() {
     }
   };
 
-  // Focus ring helpers (unchanged)
   const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.currentTarget.style.borderColor = BRAND;
     e.currentTarget.style.boxShadow   = "0 0 0 3px rgba(44,124,242,0.10)";
@@ -223,7 +206,6 @@ export default function NewJobPage() {
     e.currentTarget.style.background  = "#FAFAFA";
   };
 
-  // ── Candidate count display string ────────────────────────
   const countLabel =
     candidateCount === null
       ? "loading…"
@@ -234,7 +216,6 @@ export default function NewJobPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20, fontFamily: "'Inter', system-ui, sans-serif" }}>
 
-      {/* ── Page header (unchanged) ─────────────────────────── */}
       <div style={{
         background: "#fff", border: "1px solid #E2E8F0",
         borderRadius: 18, padding: "20px 24px",
@@ -280,7 +261,6 @@ export default function NewJobPage() {
       {/* ── Form ─────────────────────────────────────────────── */}
       <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-        {/* Basic info (unchanged) */}
         <SectionCard icon={<Briefcase size={15} color={BRAND} />} title="Basic Information" delay="0.05s">
           <Field label="Job Title" required error={errors.title?.message as string}>
             <input {...register("title")} placeholder="e.g., Backend Engineer"
@@ -313,7 +293,6 @@ export default function NewJobPage() {
           </div>
         </SectionCard>
 
-        {/* Requirements (unchanged) */}
         <SectionCard icon={<Sparkles size={15} color={BRAND} />} title="Requirements & Skills" delay="0.10s">
           <Field label="Required Skills" required
             hint="These will be used by Gemini AI for candidate matching — separate with commas"
@@ -339,10 +318,7 @@ export default function NewJobPage() {
           </div>
         </SectionCard>
 
-        {/* ── Mock candidates toggle ───────────────────────────
-            Clicking the whole card or just the toggle both work.
-            candidateCount is fetched on mount and shown live.
-        ──────────────────────────────────────────────────────── */}
+
         <div
           style={{
             background: includeMock ? "rgba(44,124,242,0.03)" : "#fff",
@@ -357,7 +333,6 @@ export default function NewJobPage() {
           onClick={() => setIncludeMock((v) => !v)}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {/* Icon box */}
             <div style={{
               width: 40, height: 40, borderRadius: 11, flexShrink: 0,
               background: includeMock ? "rgba(44,124,242,0.12)" : "#F1F5F9",
@@ -373,7 +348,6 @@ export default function NewJobPage() {
                 <p style={{ fontSize: 13, fontWeight: 700, color: "#0F172A", margin: 0 }}>
                   Include existing candidates
                 </p>
-                {/* Live count badge */}
                 {candidateCount !== null && candidateCount > 0 && (
                   <span style={{
                     padding: "1px 8px", borderRadius: 99,
@@ -394,7 +368,6 @@ export default function NewJobPage() {
             </div>
           </div>
 
-          {/* Toggle — stopPropagation so row click + toggle don't double-fire */}
           <div onClick={(e) => e.stopPropagation()} style={{ flexShrink: 0 }}>
             <Toggle on={includeMock} onToggle={() => setIncludeMock((v) => !v)} />
           </div>

@@ -1,7 +1,7 @@
 // src/app/config/constants.ts
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-export const SESSION_TIMEOUT_MS = 20 * 60 * 1000; // 20 minutes
-export const SESSION_WARNING_MS = 1 * 60 * 1000; // warn at 19 minutes
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+export const SESSION_TIMEOUT_MS = 60 * 60 * 1000; 
+export const SESSION_WARNING_MS = 1 * 60 * 1000; 
 
 export const BRAND_COLORS = {
   primary: "#2C7CF2",
