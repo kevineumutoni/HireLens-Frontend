@@ -545,6 +545,15 @@ Skills format: `SkillName:Level:YearsExp` separated by semicolons. Level must be
 
 ---
 
+## Every shortlisted candidate includes:
+- **Match Score** — 0–100 numerical score
+- **Recommendation** — Strong Yes / Yes / Maybe / No  
+- **Strengths** — specific qualifications that match the role
+- **Gaps** — specific missing requirements
+- **Reasoning** — Gemini's plain-English explanation of the score
+- **Recruiter Note** — assembled explanation ready to share with hiring managers
+
+
 ## 🏆 Team
 
 **HireLens** — Umurava AI Hackathon 2026
