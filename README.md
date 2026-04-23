@@ -69,7 +69,7 @@ What the demo covers:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        FRONTEND                              │
+│                        FRONTEND                             │
 │  Next.js 14 · TypeScript · Inline CSS · Zustand · Axios     │
 │                                                             │
 │  Pages: Dashboard · Jobs · Candidates · Screening           │
@@ -80,7 +80,7 @@ What the demo covers:
                          │ Axios · 15min timeout for screening
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                        BACKEND                               │
+│                        BACKEND                              │
 │  FastAPI · Python 3.12 · Uvicorn · Pydantic v2              │
 │                                                             │
 │  Routes:                                                    │
@@ -569,7 +569,7 @@ Skills format: `SkillName:Level:YearsExp` separated by semicolons. Level must be
 
 <div align="center">
 
-Built with ❤️ in Kigali for the **Umurava AI Hackathon 2026**
+Built with intention and ❤️ in Kigali for the **Umurava AI Hackathon 2026**
 
 *Powered by Gemini AI · FastAPI · Next.js · MongoDB*
 

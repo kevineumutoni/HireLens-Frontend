@@ -78,10 +78,7 @@ function formatAxiosError(e: unknown): string {
   }
 
   const status = e.response?.status;
-  const detail =
-    (e.response?.data as any)?.detail ??
-    (e.response?.data as any)?.message ??
-    e.message;
+  const detail = (e.response?.data as any)?.detail ?? (e.response?.data as any)?.message ?? e.message;
 
   return status ? `(${status}) ${detail}` : String(detail);
 }
@@ -101,10 +98,21 @@ export default function SignupPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    watch,
+    formState: { errors, isSubmitting, touchedFields },
   } = useForm<FormValues>({ resolver: zodResolver(schema), defaultValues: { agree: false } });
 
   const hasAnyError = useMemo(() => Object.keys(errors).length > 0, [errors]);
+
+  // NEW: live "passwords do not match" while typing confirm password
+  const confirmValue = watch("confirmPassword") ?? "";
+  const confirmTouched = !!touchedFields.confirmPassword;
+
+  const passwordsMismatchLive =
+    confirmTouched &&
+    confirmValue.length > 0 &&
+    passwordValue.length > 0 &&
+    confirmValue !== passwordValue;
 
   const onInvalid = (errs: FieldErrors<FormValues>) => {
     console.error("[signup] validation errors:", errs);
@@ -475,7 +483,8 @@ export default function SignupPage() {
                   type={showConfirm ? "text" : "password"}
                   icon={<Lock size={15} />}
                   placeholder="Repeat your password"
-                  error={!!errors.confirmPassword}
+                  // NEW: show red state while typing if mismatch (even before submit)
+                  error={!!errors.confirmPassword || passwordsMismatchLive}
                   rightSlot={
                     <button
                       type="button"
@@ -495,7 +504,8 @@ export default function SignupPage() {
                   }
                   {...register("confirmPassword")}
                 />
-                <FieldError msg={errors.confirmPassword?.message} />
+                {/* NEW: live mismatch message while typing; disappears when it matches */}
+                {passwordsMismatchLive ? <FieldError msg="Passwords do not match" /> : <FieldError msg={errors.confirmPassword?.message} />}
               </div>
 
               <div>

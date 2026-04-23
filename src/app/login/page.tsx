@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
 import { Mail, Lock, Eye, EyeOff, Sparkles, Users, BarChart3, ArrowRight } from "lucide-react";
 
 import { LensLogo } from "@/app/components/LensLogo";
@@ -61,8 +60,12 @@ function StatCard({ icon, value, label }: { icon: React.ReactNode; value: string
 export default function LoginPage() {
   const router = useRouter();
   const { setAuth } = useAuthStore();
+
   const [showPassword, setShowPassword] = useState(false);
   const [googleBusy, setGoogleBusy] = useState(false);
+
+  // NEW: inline (non-toast) error message shown above the Sign in button
+  const [formError, setFormError] = useState<string>("");
 
   const {
     register,
@@ -71,25 +74,42 @@ export default function LoginPage() {
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (v: FormValues) => {
+    setFormError("");
     try {
       const res = await signinApi(v.email, v.password);
       setAuth(res.user, res.token);
-      toast.success("Welcome back!");
       router.push("/dashboard");
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Login failed");
+      const msg =
+        e?.response?.data?.detail ||
+        e?.response?.data?.message ||
+        e?.message ||
+        "Login failed";
+
+      console.error("[Login] signin failed:", {
+        status: e?.response?.status,
+        data: e?.response?.data,
+        message: e?.message,
+      });
+
+      setFormError(msg);
     }
   };
 
   const onGoogle = async () => {
+    setFormError("");
     setGoogleBusy(true);
     try {
       const { user, token } = await googleSignIn();
       setAuth(user, token);
-      toast.success("Signed in with Google");
       router.push("/dashboard");
     } catch (e: any) {
-      toast.error(e?.message || "Google sign-in failed");
+      const msg =
+        e?.message ||
+        "Google sign-in failed";
+
+      console.error("[Login] google sign-in failed:", e);
+      setFormError(msg);
     } finally {
       setGoogleBusy(false);
     }
@@ -97,8 +117,6 @@ export default function LoginPage() {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter', system-ui, sans-serif" }}>
-
-
       <div
         style={{
           flex: "0 0 46%",
@@ -197,7 +215,6 @@ export default function LoginPage() {
             AI-powered talent screening that ranks candidates in seconds, with full explainability and zero bias.
           </p>
 
-          {/* Stats grid */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <StatCard icon={<Sparkles size={18} />} value="&lt; 8s" label="Screening time" />
             <StatCard icon={<Users size={18} />} value="50+" label="Candidates ranked" />
@@ -206,12 +223,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Footer */}
         <p style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", position: "relative" }}>
-          © 2026 HireLens · Umurava AI Hackathon 
+          © 2026 HireLens · Umurava AI Hackathon
         </p>
       </div>
-
 
       <div
         style={{
@@ -224,13 +239,10 @@ export default function LoginPage() {
         }}
       >
         <div style={{ width: "100%", maxWidth: 400 }}>
-
-          {/* Mobile logo */}
           <div style={{ marginBottom: 32, display: "flex", justifyContent: "center" }} className="lg:hidden">
             <LensLogo size={40} variant="full" />
           </div>
 
-          {/* Heading */}
           <div style={{ marginBottom: 32 }}>
             <h1
               style={{
@@ -288,18 +300,12 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-
             <div>
-              <label
-                style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 7 }}
-              >
+              <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 7 }}>
                 Email address
               </label>
               <div style={{ position: "relative" }}>
-                <Mail
-                  size={16}
-                  style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }}
-                />
+                <Mail size={16} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }} />
                 <input
                   {...register("email")}
                   type="email"
@@ -323,9 +329,7 @@ export default function LoginPage() {
                   onBlur={(e) => !errors.email && (e.currentTarget.style.borderColor = "#E2E8F0")}
                 />
               </div>
-              {errors.email && (
-                <p style={{ marginTop: 5, fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>
-              )}
+              {errors.email && <p style={{ marginTop: 5, fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>}
             </div>
 
             <div>
@@ -333,10 +337,7 @@ export default function LoginPage() {
                 <label style={{ fontSize: 13, fontWeight: 600, color: "#374151" }}>Password</label>
               </div>
               <div style={{ position: "relative" }}>
-                <Lock
-                  size={16}
-                  style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }}
-                />
+                <Lock size={16} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }} />
                 <input
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
@@ -378,10 +379,25 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
-              {errors.password && (
-                <p style={{ marginTop: 5, fontSize: 12, color: "#EF4444" }}>{errors.password.message}</p>
-              )}
+              {errors.password && <p style={{ marginTop: 5, fontSize: 12, color: "#EF4444" }}>{errors.password.message}</p>}
             </div>
+
+            {formError && (
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 12,
+                  border: "1.5px solid #FCA5A5",
+                  background: "#FEF2F2",
+                  color: "#B91C1C",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  lineHeight: 1.35,
+                }}
+              >
+                {formError}
+              </div>
+            )}
 
             <button
               type="submit"
