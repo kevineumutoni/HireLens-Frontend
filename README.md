@@ -13,12 +13,19 @@ Built for the **Umurava AI Hackathon 2026** · Team HireLens
 <br/>
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-2C7CF2?style=for-the-badge&logo=vercel)](https://hirelens.vercel.app)
-[![Backend](![Backend running in Postman](image.png))](https://github.com/kevineumutoni/HireLens-AI)
+[![Backend](![Backend running in Postman](image.png)](https://github.com/kevineumutoni/HireLens-AI)
+
 [![Video Demo](https://img.shields.io/badge/Video%20Demo-Watch%20Now-FF0000?style=for-the-badge&logo=youtube)](https://youtu.be/your-video-link)
+
 
 <br/>
 
-![HireLens Dashboard](https://raw.githubusercontent.com/your-org/hirelens/main/docs/dashboard-preview.png)
+![HireLens Dashboard](<img width="1512" height="982" alt="MacBook Pro 14_ - 3 (1)" src="https://github.com/user-attachments/assets/5f6de626-9118-467d-8def-df4d2c7e997a" />)
+
+<br/>
+ **Design Guideline**
+
+[![HireLens Figma Design](https://github.com/user-attachments/assets/64eea049-dc8e-42e9-95b1-e094bdc7a881)](https://www.figma.com/design/rbEwtGnfPKUqqg5vIcH1P5/HireLens?node-id=0-1&t=iqFJQCJP2xM1SP14-1)
 
 </div>
 
