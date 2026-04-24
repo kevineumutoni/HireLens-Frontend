@@ -1,4 +1,4 @@
-<div align="center">
+<div align="Left">
 
 <br/>
 
@@ -6,30 +6,54 @@
 
 ### *Screen smarter. Hire better.*
 
-**AI-powered talent screening that ranks 150+ candidates in minutes — with full explainability and zero bias.**
+**AI-powered talent screening that ranks 150+ candidates in minutes with full explainability and zero bias.**
 
 Built for the **Umurava AI Hackathon 2026** · Team HireLens
 
+<div align="left">
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-2C7CF2?style=for-the-badge&logo=vercel)](https://hirelens.vercel.app)
-[![Backend](![Backend running in Postman](image.png)](https://github.com/kevineumutoni/HireLens-AI)
-
-[![Video Demo](https://img.shields.io/badge/Video%20Demo-Watch%20Now-FF0000?style=for-the-badge&logo=youtube)](https://youtu.be/your-video-link)
-
-
-<br/>
-
-![HireLens Dashboard](<img width="1512" height="982" alt="MacBook Pro 14_ - 3 (1)" src="https://github.com/user-attachments/assets/5f6de626-9118-467d-8def-df4d2c7e997a" />)
-
-<br/>
- **Design Guideline**
-
-[![HireLens Figma Design](https://github.com/user-attachments/assets/64eea049-dc8e-42e9-95b1-e094bdc7a881)](https://www.figma.com/design/rbEwtGnfPKUqqg5vIcH1P5/HireLens?node-id=0-1&t=iqFJQCJP2xM1SP14-1)
-
-</div>
+## Links
+1. Live Demo: https://hire-lens-frontend-seven.vercel.app/
+2. Backend Repo: https://github.com/kevineumutoni/HireLens-AI
+3. Video Demo: https://drive.google.com/file/d/1DzjCoAZW_Y8TQjuHCXVuUTn6tHlMKrkk/view?usp=sharing
+4. Figma Design: https://www.figma.com/design/rbEwtGnfPKUqqg5vIcH1P5/HireLens?node-id=0-1&t=iqFJQCJP2xM1SP14-1
+5. Frontend Repo: https://github.com/kevineumutoni/HireLens-Frontend
 
 ---
+
+### Quick Access
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-2C7CF2?style=for-the-badge&logo=vercel)](https://hire-lens-frontend-seven.vercel.app/)
+
+[![Backend Repo](https://img.shields.io/badge/Backend-Repository-0F172A?style=for-the-badge&logo=github)](https://github.com/kevineumutoni/HireLens-AI)
+
+[![Video Demo](https://img.shields.io/badge/Video%20Demo-Watch-DC2626?style=for-the-badge&logo=youtube)](https://drive.google.com/file/d/1DzjCoAZW_Y8TQjuHCXVuUTn6tHlMKrkk/view?usp=sharing)
+
+[![Figma Design](https://img.shields.io/badge/Figma-Design-A855F7?style=for-the-badge&logo=figma)](https://www.figma.com/design/rbEwtGnfPKUqqg5vIcH1P5/HireLens?node-id=0-1&t=iqFJQCJP2xM1SP14-1)
+
+[![Frontend Repo](https://img.shields.io/badge/Frontend-Repository-0F172A?style=for-the-badge&logo=github)](https://github.com/kevineumutoni/HireLens-Frontend)
+
+---
+
+### Video Demo (click on the image to view the demo)
+
+[<img width="537" alt="Video Demo Thumbnail" src="https://github.com/user-attachments/assets/afc914c4-545e-40d1-b793-f0b6389ab45a" />](https://drive.google.com/file/d/1DzjCoAZW_Y8TQjuHCXVuUTn6tHlMKrkk/view?usp=sharing)
+
+---
+
+### HireLens Dashboard (image)
+
+<img width="1512" alt="HireLens Dashboard" src="https://github.com/user-attachments/assets/5f6de626-9118-467d-8def-df4d2c7e997a" />
+
+---
+
+### Design Guideline (click image)
+
+[<img width="900" alt="HireLens Figma Design" src="https://github.com/user-attachments/assets/64eea049-dc8e-42e9-95b1-e094bdc7a881" />](https://www.figma.com/design/rbEwtGnfPKUqqg5vIcH1P5/HireLens?node-id=0-1&t=iqFJQCJP2xM1SP14-1)
+
+---
+</div>
 
 ## The Problem
 
@@ -37,7 +61,7 @@ Screening over 150 candidates for a single opening means recruiters spend roughl
 
 ## Our Solution
 
-HireLens connects to your candidate pool, takes your job requirements, and hands every profile to **Gemini AI** for objective evaluation. In 1–2 minutes you get a ranked shortlist — each candidate with a match score, strengths, gaps, and a plain-English recruiter note explaining *why* they were ranked where they are.
+HireLens connects to your candidate pool, takes your job requirements, and hands every profile to **Gemini AI** for objective evaluation. In 1–2 minutes you get a ranked shortlist; each candidate with a match score, strengths, gaps, and a plain-English recruiter note explaining *why* they were ranked where they are.
 
 The recruiter stays in control. The AI does the reading.
 
@@ -61,7 +85,7 @@ The recruiter stays in control. The AI does the reading.
 
 ## 🎬 Demo
 
-> **Video walkthrough (5–10 min):** [Watch on YouTube →](https://youtu.be/your-video-link)
+> **Video walkthrough (9.18 mins):** [Watch on YouTube →](https://youtu.be/arWW5hBTotQ)
 
 What the demo covers:
 1. Creating a job posting with required skills
@@ -298,7 +322,7 @@ FRONTEND_URL=http://localhost:3000
 python -m uvicorn src.app:app --reload --port 8000
 
 # API docs available at:
-# http://localhost:8000/docs
+http://localhost:8000/docs
 ```
 
 ---
