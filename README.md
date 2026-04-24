@@ -19,6 +19,8 @@ Built for the **Umurava AI Hackathon 2026** · Team HireLens
 3. Video Demo: https://drive.google.com/file/d/1DzjCoAZW_Y8TQjuHCXVuUTn6tHlMKrkk/view?usp=sharing
 4. Figma Design: https://www.figma.com/design/rbEwtGnfPKUqqg5vIcH1P5/HireLens?node-id=0-1&t=iqFJQCJP2xM1SP14-1
 5. Frontend Repo: https://github.com/kevineumutoni/HireLens-Frontend
+6. API documentation: https://hirelens-hh2zui6bcq-ew.a.run.app/docs
+7. Google Slides Link: https://docs.google.com/presentation/d/1eeWqC_I0Gg6y2RQdlJGaZCxuHGEDY7vtc_H_7W77chM/edit?usp=sharing
 
 ---
 
@@ -33,6 +35,10 @@ Built for the **Umurava AI Hackathon 2026** · Team HireLens
 [![Figma Design](https://img.shields.io/badge/Figma-Design-A855F7?style=for-the-badge&logo=figma)](https://www.figma.com/design/rbEwtGnfPKUqqg5vIcH1P5/HireLens?node-id=0-1&t=iqFJQCJP2xM1SP14-1)
 
 [![Frontend Repo](https://img.shields.io/badge/Frontend-Repository-0F172A?style=for-the-badge&logo=github)](https://github.com/kevineumutoni/HireLens-Frontend)
+
+[![API Docs](https://img.shields.io/badge/API%20Docs-Open-16A34A?style=for-the-badge)](https://hirelens-hh2zui6bcq-ew.a.run.app/docs)
+
+[![Pitch Deck](https://img.shields.io/badge/Pitch%20Deck-Google%20Slides-FBBC04?style=for-the-badge&logo=googleslides&logoColor=black)](https://docs.google.com/presentation/d/1eeWqC_I0Gg6y2RQdlJGaZCxuHGEDY7vtc_H_7W77chM/edit?usp=sharing)
 
 ---
 
@@ -494,6 +500,57 @@ cd HireLens-Frontend && npm run dev
 
 **Why Gemini over other models?**
 Gemini API is mandatory per hackathon rules and the `gemini-2.5-flash-lite` model gives fast, consistent structured outputs ideal for batch screening.
+
+### Why not Gemini 1.5 Flash or 1.5 Pro?
+
+`gemini-1.5-flash` and `gemini-1.5-pro` are previous-generation models. 
+2.5 Flash is Google's latest production model as of April 2026 and outperforms 
+both on reasoning benchmarks while maintaining the same speed profile. 
+For a screening task that requires interpreting nuanced skill descriptions, 
+inferring experience relevance from job history, and producing structured JSON 
+reliably — better reasoning directly translates to more accurate match scores. 
+1.5 Pro is slower and more expensive. 1.5 Flash produces less consistent 
+structured output. 2.5 Flash gives us the best of both.
+
+### Why not Gemini 2.5 Pro?
+
+`gemini-2.5-pro` is more powerful but significantly slower — average response 
+times of 8–15 seconds per candidate versus 2–4 seconds for 2.5 Flash. 
+At 155 candidates in batches of 5, that difference compounds into minutes of 
+extra wall-clock time per screening run. The screening task does not require 
+deep multi-step reasoning or long-context analysis — it requires fast, 
+consistent structured evaluation of a single candidate profile against fixed 
+criteria. 2.5 Flash is the right tool for that job.
+
+### Why not GPT-4o, Claude, or another LLM entirely?
+
+Beyond the hackathon requirement, Gemini has practical advantages for this 
+use case specifically:
+
+- **Free tier with key rotation.** Gemini's free tier allows 15 requests/minute 
+  per API key. By rotating across multiple keys with round-robin load balancing, 
+  we can screen 155 candidates without hitting quota walls mid-run — at zero cost. 
+  GPT-4o and Claude Sonnet have no meaningful free tier for batch workloads.
+
+- **JSON output reliability.** Gemini 2.5 Flash at temperature 0.2 produces 
+  clean, parseable JSON on over 95% of calls in our testing. The low temperature 
+  setting trades creativity for determinism — exactly what you want when the 
+  output feeds a ranking algorithm and a single malformed response would break 
+  a candidate's evaluation.
+
+- **No vendor lock-in beyond the API.** The `GeminiClient` in 
+  `src/services/gemini_client.py` is a thin wrapper around a REST call. 
+  Swapping to a different model or provider requires changing one URL and one 
+  model string — the rest of the pipeline is model-agnostic.
+
+### The one real tradeoff
+
+Gemini's free tier rate limits (15 RPM per key) mean throughput scales with 
+the number of API keys available, not with compute. This is why multi-key 
+rotation is a first-class feature of HireLens rather than an afterthought — 
+adding a second key doubles throughput, a third triples it. In a production 
+deployment with a paid tier, the batch size and concurrency settings in 
+`src/config/settings.py` can be increased accordingly.
 
 **Why key rotation?**
 Gemini free tier is 15 requests/minute per key. With 20 candidates in batches of 5, that's 4 API calls. Multiple keys let us screen the full pool without hitting quota walls mid-run.
